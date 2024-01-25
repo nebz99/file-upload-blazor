@@ -1,6 +1,7 @@
 namespace web.Models;
-public class User 
+
+public record User 
 {
-    public string Name { get; init; }
+    public required string Name { get; init; }
     public IEnumerable<string> OwnedFiles { get; init; } = [];
 }

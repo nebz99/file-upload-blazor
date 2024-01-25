@@ -4,6 +4,7 @@
 ## Get latest from `dotnet new gitignore`
 
 web/wwwroot/uploads
+users.json
 
 # dotenv files
 .env

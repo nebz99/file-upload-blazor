@@ -1,11 +1,10 @@
 ﻿@page "/"
-@page "/file-upload-1"
 @using System
 @using System.IO
 @using Microsoft.AspNetCore.Hosting
 @inject ILogger<Home> Logger
 @inject IWebHostEnvironment Environment
-@inject UserService userService;
+@inject UserService userService
 @rendermode InteractiveServer
 
 <PageTitle>File Upload 1</PageTitle>
@@ -13,25 +12,12 @@
 <h1>File Upload Example 1</h1>
 
 
-@if(loggedInUser == null)
-{
-    <form @onsubmit:preventDefault="true" @onsubmit=setUser>
-
-        <label for="userName" >User Name</label>
-        <input id="userName" @bind=inputUserField @bind:event=oninput  />
-    </form>
-}
-else
-{
-    <p>logged in user is @loggedInUser</p>
-}
-
-<br>
-<br>
+<label for="userName">Name</label>
+<input @bind="userName" @bind:event="oninput" />
 
 <p>
     <label>
-        <InputFile OnChange="@LoadFiles" multiple />
+        <InputFile OnChange="@LoadFiles" />
     </label>
 </p>
 
@@ -55,30 +41,47 @@ else
         }
     </ul>
 }
+<hr>
+@foreach (var user in userService.Users)
+{
+    <div>
+    @user.Name
+    <ul>
+        @foreach (var fileName in user.OwnedFiles)
+            {
+                <li>@fileName</li>
+            }
+        </ul>
+    </div>
+}
+
 
 @code {
     private List<IBrowserFile> loadedFiles = new();
-    private string? loggedInUser { get; set; } = null;
-    private string inputUserField = "";
     private bool isLoading;
+
+    private string userName { get; set; } = "";
+
 
     private async Task LoadFiles(InputFileChangeEventArgs e)
     {
-        isLoading = true;
-        loadedFiles.Clear();
-
-        foreach (var file in e.GetMultipleFiles(1))
+        if (userName != "")
         {
-            userService.StoreFile(loggedInUser, file);
-            loadedFiles.Add(file);
+            isLoading = true;
+            loadedFiles.Clear();
 
+            foreach (var file in e.GetMultipleFiles(1))
+            {
+                await userService.StoreFile(userName, file);
+                loadedFiles.Add(file);
+            }
+
+            isLoading = false;
         }
-
-        isLoading = false;
+        else 
+        {
+            Console.WriteLine("cannot upload file, user not signed in");
+        }
     }
 
-    private void setUser()
-    {
-        loggedInUser = inputUserField;
-    }
 }
