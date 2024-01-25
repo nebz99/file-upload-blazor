@@ -1,6 +1,6 @@
 ﻿@page "/"
 @page "/file-upload-1"
-@using System 
+@using System
 @using System.IO
 @using Microsoft.AspNetCore.Hosting
 @inject ILogger<Home> Logger
@@ -12,6 +12,22 @@
 
 <h1>File Upload Example 1</h1>
 
+
+@if(loggedInUser == null)
+{
+    <form @onsubmit:preventDefault="true" @onsubmit=setUser>
+
+        <label for="userName" >User Name</label>
+        <input id="userName" @bind=inputUserField @bind:event=oninput  />
+    </form>
+}
+else
+{
+    <p>logged in user is @loggedInUser</p>
+}
+
+<br>
+<br>
 
 <p>
     <label>
@@ -26,7 +42,7 @@
 else
 {
     <ul>
-        @foreach (var file in loadedFiles)
+    @foreach (var file in loadedFiles)
         {
             <li>
                 <ul>
@@ -42,6 +58,8 @@ else
 
 @code {
     private List<IBrowserFile> loadedFiles = new();
+    private string? loggedInUser { get; set; } = null;
+    private string inputUserField = "";
     private bool isLoading;
 
     private async Task LoadFiles(InputFileChangeEventArgs e)
@@ -51,29 +69,16 @@ else
 
         foreach (var file in e.GetMultipleFiles(1))
         {
-            try
-            {
-                var trustedFileName = Path.GetRandomFileName();
-                var path = Path.Combine(Environment.ContentRootPath,
-                    "wwwroot/uploads",
-                    trustedFileName);
+            userService.StoreFile(loggedInUser, file);
+            loadedFiles.Add(file);
 
-                await using FileStream fs = new(path, FileMode.Create);
-                await file.OpenReadStream().CopyToAsync(fs);
-
-                loadedFiles.Add(file);
-
-                Logger.LogInformation(
-                    "Unsafe Filename: {UnsafeFilename} File saved: {Filename}",
-                    file.Name, trustedFileName);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError("File: {Filename} Error: {Error}", 
-                    file.Name, ex.Message);
-            }
         }
 
         isLoading = false;
+    }
+
+    private void setUser()
+    {
+        loggedInUser = inputUserField;
     }
 }
