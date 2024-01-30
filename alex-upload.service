@@ -2,8 +2,8 @@
 Description=Alex File Upload
 
 [Service]
-WorkingDirectory=/home/alex/deploment/file-upload-blazor/
-ExecStart=/home/alex/.dotnet/dotnet /home/alex/deploment/file-upload-blazor/bin/Release/net8.0/BlazorApp.dll
+WorkingDirectory=/home/alex/deployment/file-upload-blazor/
+ExecStart=/home/alex/.dotnet/dotnet /home/alex/deployment/file-upload-blazor/bin/Release/net8.0/BlazorApp.dll
 #Restart=always
 #RestartSec=10
 KillSignal=SIGINT

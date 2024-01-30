@@ -1,9 +1,10 @@
 #!/bin/bash
 
-mkdir -p /home/alex/deploment
+mkdir -p /home/alex/deployment
 
-cd /home/alex/deploment
-rm -rf *
+cd /home/alex/deployment
+rm -rf bin
+rm -rf obj
 
 git clone https://github.com/alexmickelson/file-upload-blazor.git
 
