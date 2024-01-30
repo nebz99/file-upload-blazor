@@ -1,0 +1,17 @@
+[Unit]
+Description=Alex File Upload
+
+[Service]
+WorkingDirectory=/home/alex/deploment/file-upload-blazor/
+ExecStart=/home/alex/.dotnet/dotnet /home/alex/deploment/file-upload-blazor/bin/Release/net8.0/BlazorApp.dll
+#Restart=always
+#RestartSec=10
+KillSignal=SIGINT
+# StandardOutput=append:/home/alex/OldSchoolGroup6/BlazorApp/logs/start-stop.log
+# StandardError=append:/home/alex/OldSchoolGroup6/BlazorApp/logs/start-stop.log
+User=alex
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=ASPNETCORE_URLS=http://0.0.0.0:9004
+
+[Install]
+WantedBy=multi-user.target
