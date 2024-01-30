@@ -1,14 +1,10 @@
 #!/bin/bash
 
-mkdir -p /home/alex/deployment
+cd /home/alex/deployment/file-upload-blazor
 
-cd /home/alex/deployment
 rm -rf bin
 rm -rf obj
-
 git pull 
-
-cd file-upload-blazor
 dotnet publish
 
 sudo cp alex-upload.service /etc/systemd/system/alex-upload.service
