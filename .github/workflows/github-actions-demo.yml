@@ -11,6 +11,7 @@ jobs:
          # build image
          docker build -t kalin-test-blazor-thing .
          #run image
+         docker rm -f kalin-test-blazor-thing || true
          docker run -d \
            -p 3482:8080 \
            --name kalin-test-blazor-thing \
