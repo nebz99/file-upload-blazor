@@ -12,7 +12,7 @@ jobs:
          docker build -t kalin-test-blazor-thing .
          #run image
          docker run -d \
-           -p 39482:8080 \
+           -p 3482:8080 \
            --name kalin-test-blazor-thing \
            kalin-test-blazor-thing
 
